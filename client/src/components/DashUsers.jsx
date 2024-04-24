@@ -51,7 +51,7 @@ export default function DashUsers() {
         const res = await fetch(`/api/user/delete/${userIdToDelete}`, {
             method: 'DELETE',
         });
-        const data = await res.json();
+        const data = await res.json(); 
         if (res.ok) {
             setUsers((prev) => prev.filter((user) => user._id !== userIdToDelete));
             setShowModal(false);
