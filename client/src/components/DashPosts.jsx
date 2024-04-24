@@ -29,7 +29,7 @@ export default function DashPosts() {
     }
   }, [currentUser._id]);
 
-  const handleShowMore = async () => {
+  const handleShowMore  = async () => {
     const startIndex = userPosts.length;
     try {
       const res = await fetch(
