@@ -127,7 +127,7 @@ export default function Comment({ comment, onLike, onEdit, onDelete }) {
                     </button>
                     <button
                       type='button'
-                      onClick={() => onDelete(comment._id)}
+                      onClick={() => onDelete(comment._id)} 
                       className='text-gray-400 hover:text-red-500'
                     >
                       Delete

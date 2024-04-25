@@ -84,7 +84,7 @@ export const deleteComment = async (req, res, next) => {
   try {
     const comment = await Comment.findById(req.params.commentId);
     if (!comment) {
-      return next(errorHandler(404, 'Comment not found'));
+      return next(errorHandler(404, 'Comment not found')); 
     }
     if (comment.userId !== req.user.id && !req.user.isAdmin) {
       return next(
