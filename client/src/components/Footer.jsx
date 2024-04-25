@@ -20,15 +20,15 @@ export default function FooterCom() {
                 <Footer.Title title="About" />
                 <Footer.LinkGroup col>
                     <Footer.Link
-                    href="/"
+                    href="https://sameermaurya.netlify.app/"
                     target="_blank"
                     rel="noopener noreferrer"
-                    >XYZ</Footer.Link>
+                    >Portfolio</Footer.Link>
                        <Footer.Link
                     href="/about"
                     target="_blank"
                     rel="noopener noreferrer"
-                    >XYZ</Footer.Link>
+                    >About</Footer.Link>
                    
                 </Footer.LinkGroup>
                    </div>
