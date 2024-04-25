@@ -113,7 +113,7 @@ export default function Comment({ comment, onLike, onEdit, onDelete }) {
                 {comment.numberOfLikes > 0 &&
                   comment.numberOfLikes +
                     ' ' +
-                    (comment.numberOfLikes === 1 ? 'like' : 'likes')}
+                    (comment.numberOfLikes === 1 ? 'like' : 'likes')} 
               </p>
               {currentUser &&
                 (currentUser._id === comment.userId || currentUser.isAdmin) && (
