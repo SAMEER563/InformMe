@@ -42,7 +42,7 @@ export default function Comment({ comment, onLike, onEdit, onDelete }) {
         }),
       });
       if (res.ok) {
-        setIsEditing(false);
+        setIsEditing(false); 
         onEdit(comment, editedContent);
       }
     } catch (error) {
@@ -121,7 +121,7 @@ export default function Comment({ comment, onLike, onEdit, onDelete }) {
                     <button
                       type='button'
                       onClick={handleEdit}
-                      className='text-gray-400 hover:text-blue-500'
+                      className='text-gray-400 hover:text-blue-500' 
                     >
                       Edit
                     </button>
