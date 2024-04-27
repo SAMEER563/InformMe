@@ -35,7 +35,7 @@ export default function App() {
         <Route path = "/sign-up" element = {<SignUp /> }/>
         <Route path="/search" element={<Search />} />
         <Route path="/projects" element={<Projects />} />
-        <Route path="/post/:postSlug" element={<PostPage />} />
+        <Route path="/post/:postSlug" element={<PostPage />} /> 
       </Routes>
       <Footer />
      </BrowserRouter>
