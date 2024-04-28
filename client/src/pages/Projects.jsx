@@ -7,5 +7,5 @@ export default function Projects() {
       <p className='text-md text-gray-500'>Build fun and engaging projects while learning HTML, CSS, and JavaScript! </p>
       <CallToAction />
     </div>
-  )
+  ) 
 }
