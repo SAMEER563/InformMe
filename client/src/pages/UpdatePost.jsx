@@ -123,18 +123,48 @@ export default function UpdatePost() {
             }
             value={formData.title}
           />
+        </div>
+        <div className="flex flex-col gap-4 justify-between sm:flex-row ">
           <Select
             onChange={(e) =>
               setFormData({ ...formData, category: e.target.value })
             }
-            value={formData.category}
           >
-            <option value='uncategorized'>Select a category</option>
-            <option value='javascript'>JavaScript</option>
-            <option value='reactjs'>React.js</option>
-            <option value='nextjs'>Next.js</option>
+            <option value='Uncategorized'>Select a category</option>
+            <option value='Placement'>Placement</option>
+            <option value='Exams'>Exams</option>
+            <option value='Holiday'>Holiday</option>
+            <option value='Events'>Events</option>
+
           </Select>
-        </div>
+          <Select
+            onChange={(e) =>
+              setFormData({ ...formData, course: e.target.value })
+            }
+          >
+            <option value='uncategorized'>Select a course</option>
+            <option value='MBA'>MBA</option>
+            <option value='BTech'>B Tech</option>
+            <option value='Diploma'>Diploma</option>
+          </Select>
+          <Select
+            onChange={(e) =>
+              setFormData({ ...formData, branch: e.target.value })
+            }
+          >
+            <option value='uncategorized'>Select a branch</option>
+            <option value='javascript'>CSE</option>
+            <option value='Machenical'>Machenical</option>
+            <option value='Civil'>Civil</option>
+            <option value='Electrical'>Electrical</option>
+            <option value='Electronics'>Electronics</option>
+            <option value='IT'>IT</option>
+            <option value='Finance'>Finance</option>
+            <option value='HR'>HR</option>
+            <option value='Marketing'>Marketing</option>
+          </Select>
+         
+          </div>
         <div className='flex gap-4 items-center justify-between border-4 border-teal-500 border-dotted p-3'>
           <FileInput
             type='file'
