@@ -34,6 +34,8 @@ export const getposts = async (req, res, next) => {
     const posts = await Post.find({
       ...(req.query.userId && { userId: req.query.userId }),
       ...(req.query.category && { category: req.query.category }),
+      ...(req.query.course && { course: req.query.course }),
+      ...(req.query.branch && { branch: req.query.branch }),
       ...(req.query.slug && { slug: req.query.slug }),
       ...(req.query.postId && { _id: req.query.postId }),
       ...(req.query.searchTerm && {
@@ -95,6 +97,8 @@ export const updatepost = async (req, res, next) => {
           title: req.body.title,
           content: req.body.content,
           category: req.body.category,
+          course: req.body.course,
+          branch: req.body.branch,
           image: req.body.image,
         },
       },
