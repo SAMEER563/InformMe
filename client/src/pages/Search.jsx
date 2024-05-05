@@ -130,11 +130,14 @@ export default function Search() {
               value={sidebarData.category}
               id='category'
             >
-              <option value='uncategorized'>Uncategorized</option>
-              <option value='reactjs'>React.js</option>
-              <option value='nextjs'>Next.js</option>
-              <option value='javascript'>JavaScript</option>
-            </Select>
+           
+            <option value='Uncategorized'>Select a category</option>
+            <option value='Placement'>Placement</option>
+            <option value='Exams'>Exams</option>
+            <option value='Holiday'>Holiday</option>
+            <option value='Events'>Events</option>
+
+          </Select>
           </div>
           <Button type='submit' outline gradientDuoTone='purpleToPink'>
             Apply Filters
