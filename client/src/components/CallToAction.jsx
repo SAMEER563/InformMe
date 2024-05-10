@@ -15,6 +15,7 @@ export default function CallToAction() {
                     100 JavaScript Projects
                 </a>
             </Button> */}
+            
         </div>
         <div className="p-7 flex-1">
             <img src="https://bairesdev.mo.cloudinary.net/blog/2023/08/What-Is-JavaScript-Used-For.jpg" />
