@@ -52,8 +52,8 @@ export default function SignUp() {
         {/* left */}
         <div className="flex-1">
         <Link to="/" className="font-bold dark:text-white text-4xl">
-        <span className="px-2 py-1 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-lg text-white">RITM</span>
-       Blog
+        <span className="px-2 py-1 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-lg text-white">Inform</span>
+       Me
        </Link>
        <p className="text-sm mt-5">
         This project is a blog website that allows users to create, read, update, and delete blog posts. The project is built using the MERN stack (MongoDB, Express, React, Node.js). The project is hosted on Heroku and Netlify. The project is open source and the code is available on GitHub.
