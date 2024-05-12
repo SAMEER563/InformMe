@@ -8,7 +8,7 @@ export default function ContactUs() {
       Mobile Number - +91- 1234567890
 
    </div>
-   <div className="text-blue-500"> Email - ritmlucknow@gmail.com</div>
+   <div className="text-blue-500"> Email - info.ritm@gmail.com</div>
    </div>
    
    </>
