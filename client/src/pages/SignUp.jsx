@@ -56,7 +56,7 @@ export default function SignUp() {
        Me
        </Link>
        <p className="text-sm mt-5">
-        This project is a blog website that allows users to create, read, update, and delete blog posts. The project is built using the MERN stack (MongoDB, Express, React, Node.js). The project is hosted on Heroku and Netlify. The project is open source and the code is available on GitHub.
+       This project is a blog website that allows admin to create, read, update, and delete blog posts. The project is built using the MERN stack (MongoDB, Express, React, Node.js). The project is hosted on Render. The project is open source and the code is available on GitHub.
        </p>
         </div>
 
