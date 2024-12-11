@@ -60,7 +60,7 @@ Git (optional for cloning the repository)
 <h2>Setting up the Project</h2>
 <h3>1. Clone the Repository</h3>
 Clone the repository to your local machine:   <br/>
-git clone https://github.com/SAMEER563/blogsphere.git
+git clone https://github.com/SAMEER563/InformMe.git
 
 <br/> 
 <h3>2. Install Backend Dependencies</h3>
