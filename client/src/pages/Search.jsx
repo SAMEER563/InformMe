@@ -4,168 +4,144 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import PostCard from '../components/PostCard';
 
 export default function Search() {
-  const [sidebarData, setSidebarData] = useState({
+  const [filters, setFilters] = useState({
     searchTerm: '',
     sort: 'desc',
-    category: 'uncategorized',
+    category: 'Uncategorized',
   });
 
-  console.log(sidebarData);
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(false);
   const [showMore, setShowMore] = useState(false);
 
   const location = useLocation();
-
   const navigate = useNavigate();
 
+  // Fetch posts whenever URL changes
   useEffect(() => {
     const urlParams = new URLSearchParams(location.search);
     const searchTermFromUrl = urlParams.get('searchTerm');
     const sortFromUrl = urlParams.get('sort');
     const categoryFromUrl = urlParams.get('category');
-    if (searchTermFromUrl || sortFromUrl || categoryFromUrl) {
-      setSidebarData({
-        ...sidebarData,
-        searchTerm: searchTermFromUrl,
-        sort: sortFromUrl,
-        category: categoryFromUrl,
-      });
-    }
+
+    setFilters((prev) => ({
+      ...prev,
+      searchTerm: searchTermFromUrl || '',
+      sort: sortFromUrl || 'desc',
+      category: categoryFromUrl || 'Uncategorized',
+    }));
 
     const fetchPosts = async () => {
       setLoading(true);
-      const searchQuery = urlParams.toString();
-      const res = await fetch(`/api/post/getposts?${searchQuery}`);
-      if (!res.ok) {
-        setLoading(false);
-        return;
-      }
-      if (res.ok) {
-        const data = await res.json();
-        setPosts(data.posts);
-        setLoading(false);
-        if (data.posts.length === 9) {
-          setShowMore(true);
-        } else {
-          setShowMore(false);
-        }
-      }
+      const res = await fetch(`/api/post/getposts?${urlParams.toString()}`);
+      if (!res.ok) return setLoading(false);
+      const data = await res.json();
+      setPosts(data.posts);
+      setLoading(false);
+      setShowMore(data.posts.length === 9);
     };
     fetchPosts();
   }, [location.search]);
 
   const handleChange = (e) => {
-    if (e.target.id === 'searchTerm') {
-      setSidebarData({ ...sidebarData, searchTerm: e.target.value });
-    }
-    if (e.target.id === 'sort') {
-      const order = e.target.value || 'desc';
-      setSidebarData({ ...sidebarData, sort: order });
-    }
-    if (e.target.id === 'category') {
-      const category = e.target.value || 'uncategorized';
-      setSidebarData({ ...sidebarData, category });
-    }
+    const { id, value } = e.target;
+    setFilters({ ...filters, [id]: value });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const urlParams = new URLSearchParams(location.search);
-    urlParams.set('searchTerm', sidebarData.searchTerm);
-    urlParams.set('sort', sidebarData.sort);
-    urlParams.set('category', sidebarData.category);
-    const searchQuery = urlParams.toString();
-    navigate(`/search?${searchQuery}`);
+    const params = new URLSearchParams(filters).toString();
+    navigate(`/search?${params}`);
   };
 
   const handleShowMore = async () => {
-    const numberOfPosts = posts.length;
-    const startIndex = numberOfPosts;
+    const startIndex = posts.length;
     const urlParams = new URLSearchParams(location.search);
     urlParams.set('startIndex', startIndex);
-    const searchQuery = urlParams.toString();
-    const res = await fetch(`/api/post/getposts?${searchQuery}`);
-    if (!res.ok) {
-      return;
-    }
-    if (res.ok) {
-      const data = await res.json();
-      setPosts([...posts, ...data.posts]);
-      if (data.posts.length === 9) {
-        setShowMore(true);
-      } else {
-        setShowMore(false);
-      }
-    }
+    const res = await fetch(`/api/post/getposts?${urlParams.toString()}`);
+    if (!res.ok) return;
+    const data = await res.json();
+    setPosts([...posts, ...data.posts]);
+    setShowMore(data.posts.length === 9);
   };
 
   return (
-    <div className='flex flex-col md:flex-row'>
-      <div className='p-7 border-b md:border-r md:min-h-screen border-gray-500'>
-        <form className='flex flex-col gap-8' onSubmit={handleSubmit}>
-          <div className='flex   items-center gap-2'>
-            <label className='whitespace-nowrap font-semibold'>
-              Search Term:
+    <div className="flex flex-col md:flex-row min-h-screen bg-green-50">
+      {/* Sidebar Filters */}
+      <aside className="w-full md:w-1/4 bg-green-100 p-6 border-b md:border-b-0 md:border-r border-green-300">
+        <h2 className="text-xl font-bold text-green-700 mb-6">Filter Shops</h2>
+        <form className="flex flex-col gap-6" onSubmit={handleSubmit}>
+          <div>
+            <label htmlFor="searchTerm" className="block font-medium text-green-800 mb-1">
+              Search
             </label>
             <TextInput
-              placeholder='Search...'
-              id='searchTerm'
-              type='text'
-              value={sidebarData.searchTerm}
+              id="searchTerm"
+              type="text"
+              value={filters.searchTerm}
+              placeholder="Type keywords..."
               onChange={handleChange}
+              className="border-green-400 focus:border-green-600"
             />
           </div>
-          <div className='flex items-center gap-2'>
-            <label className='font-semibold'>Sort:</label>
-            <Select onChange={handleChange} value={sidebarData.sort} id='sort'>
-              <option value='desc'>Latest</option>
-              <option value='asc'>Oldest</option>
+
+          <div>
+            <label htmlFor="sort" className="block font-medium text-green-800 mb-1">
+              Sort By
+            </label>
+            <Select id="sort" value={filters.sort} onChange={handleChange}>
+              <option value="desc">Latest</option>
+              <option value="asc">Oldest</option>
             </Select>
           </div>
-          <div className='flex items-center gap-2'>
-            <label className='font-semibold'>Category:</label>
-            <Select
-              onChange={handleChange}
-              value={sidebarData.category}
-              id='category'
-            >
-           
-            <option value='Uncategorized'>Select a category</option>
-            <option value='Placement'>Placement</option>
-            <option value='Exams'>Exams</option>
-            <option value='Holiday'>Holiday</option>
-            <option value='Events'>Events</option>
 
-          </Select>
+          <div>
+            <label htmlFor="category" className="block font-medium text-green-800 mb-1">
+              Category
+            </label>
+            <Select id="category" value={filters.category} onChange={handleChange}>
+              <option value="Uncategorized">All Categories</option>
+              <option value="Placement">Placement</option>
+              <option value="Exams">Exams</option>
+              <option value="Holiday">Holiday</option>
+              <option value="Events">Events</option>
+            </Select>
           </div>
-          <Button type='submit' outline gradientDuoTone='purpleToPink'>
+
+          <Button type="submit" className="bg-green-600 hover:bg-green-700 text-white">
             Apply Filters
           </Button>
         </form>
-      </div>
-      <div className='w-full'>
-        <h1 className='text-3xl font-semibold sm:border-b border-gray-500 p-3 mt-5 '>
-          Posts results:
+      </aside>
+
+      {/* Posts Section */}
+      <main className="flex-1 p-6">
+        <h1 className="text-3xl font-bold text-green-700 mb-6 border-b border-green-300 pb-2">
+          Shop Results
         </h1>
-        <div className='p-7 flex flex-wrap gap-4'>
-          {!loading && posts.length === 0 && (
-            <p className='text-xl text-gray-500'>No posts found.</p>
-          )}
-          {loading && <p className='text-xl text-gray-500'>Loading...</p>}
-          {!loading &&
-            posts &&
-            posts.map((post) => <PostCard key={post._id} post={post} />)}
-          {showMore && (
-            <button
+
+        {loading && <p className="text-green-800 text-lg">Loading...</p>}
+        {!loading && posts.length === 0 && (
+          <p className="text-green-800 text-lg">No shops found matching your criteria.</p>
+        )}
+
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {posts.map((post) => (
+            <PostCard key={post._id} post={post} />
+          ))}
+        </div>
+
+        {showMore && (
+          <div className="mt-6 text-center">
+            <Button
               onClick={handleShowMore}
-              className='text-teal-500 text-lg hover:underline p-7 w-full'
+              className="bg-green-600 hover:bg-green-700 text-white px-6 py-2"
             >
               Show More
-            </button>
-          )}
-        </div>
-      </div>
+            </Button>
+          </div>
+        )}
+      </main>
     </div>
   );
 }
