@@ -1,111 +1,115 @@
-import { Alert, Button, Label, Spinner, TextInput } from "flowbite-react";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import {signInStart, signInSuccess, signInFailure } from "../redux/user/userSlice";
+import { signInStart, signInSuccess, signInFailure } from "../redux/user/userSlice";
 import OAuth from "../components/OAuth";
-
 
 export default function SignIn() {
   const [formData, setFormData] = useState({});
-  const {loading, error: errorMessage} = useSelector((state) => state.user);
+  const { loading, error: errorMessage } = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.id]: e.target.value.trim()});
+    setFormData({ ...formData, [e.target.id]: e.target.value.trim() });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if ( !formData.email || !formData.password) {
-     return dispatch(signInFailure('Please fill in all fields'));
-      
+    if (!formData.email || !formData.password) {
+      return dispatch(signInFailure("Please fill in all fields"));
     }
     try {
       dispatch(signInStart());
-      const res = await fetch('/api/auth/signin', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+      const res = await fetch("/api/auth/signin", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
       });
       const data = await res.json();
-      if (data.success === false) {
-       dispatch(signInFailure(data.message));
-      }
-   
+      if (data.success === false) dispatch(signInFailure(data.message));
+
       if (res.ok) {
         dispatch(signInSuccess(data));
-        navigate('/');
+        navigate("/");
       }
     } catch (error) {
       dispatch(signInFailure(error.message));
     }
   };
 
-   
-  
   return (
-    <div className="min-h-screen mt-20">
-      <div className="flex p-3 max-w-3xl mx-auto flex-col md:flex-row md:items-center gap-5" >
-
-        {/* left */}
-        <div className="flex-1">
-        <Link to="/" className="font-bold dark:text-white text-4xl">
-        <span className="px-2 py-1 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-lg text-white">Inform</span>
-       Me
-       </Link>
-       <p className="text-sm mt-5">
-        This project is a blog website that allows admin to create, read, update, and delete blog posts. The project is built using the MERN stack (MongoDB, Express, React, Node.js). The project is hosted on Render. The project is open source and the code is available on GitHub.
-       </p>
+    <div className="min-h-screen flex items-center justify-center bg-green-50 px-4">
+      <div className="max-w-4xl w-full bg-white rounded-2xl shadow-lg overflow-hidden flex flex-col md:flex-row">
+        {/* Left section */}
+        <div className="flex-1 bg-green-600 text-white p-10 flex flex-col justify-center">
+          <Link to="/" className="text-4xl font-bold mb-5 inline-block">
+            <span className="bg-white text-green-600 px-3 py-1 rounded-lg">Store</span> Beacon
+          </Link>
+          <p className="mt-4 text-green-100">
+            A platform where shops can list their businesses and users can easily find shop details.
+            Built with modern web technologies for a smooth experience.
+          </p>
         </div>
 
-        {/* right */}
-        <div className="flex-1">
-          <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
-         
-            <div>
-              <Label value="Your Email" />
-              <TextInput type="email" placeholder="name@company.com"
-              id="email" onChange={handleChange}
+        {/* Right section */}
+        <div className="flex-1 p-10 flex flex-col justify-center">
+          <h2 className="text-2xl font-bold text-green-700 mb-6">Sign In to Your Account</h2>
+
+          <form className="flex flex-col gap-5" onSubmit={handleSubmit}>
+            <div className="flex flex-col">
+              <label htmlFor="email" className="mb-1 text-gray-700 font-medium">
+                Email
+              </label>
+              <input
+                type="email"
+                id="email"
+                placeholder="name@company.com"
+                onChange={handleChange}
+                className="border border-green-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
               />
             </div>
-            <div>
-              <Label value="Your Password" />
-              <TextInput type="password" placeholder="*********"
-              id="password" onChange={handleChange}
+
+            <div className="flex flex-col">
+              <label htmlFor="password" className="mb-1 text-gray-700 font-medium">
+                Password
+              </label>
+              <input
+                type="password"
+                id="password"
+                placeholder="*********"
+                onChange={handleChange}
+                className="border border-green-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
               />
             </div>
-            <Button gradientDuoTone="purpleToPink" type="submit" pill disabled={loading}>
-              {
-                loading ? (
-                  <>
-                  <Spinner size='sm' />
-                  <span className="pl-3">Loading...</span>
-                  </>
-                 ) : (
-                  'Sign In'
-              )}
-            </Button>
+
+            <button
+              type="submit"
+              disabled={loading}
+              className={`bg-green-600 text-white font-semibold py-2 rounded-md transition hover:bg-green-700 ${
+                loading ? "opacity-70 cursor-not-allowed" : ""
+              }`}
+            >
+              {loading ? "Signing In..." : "Sign In"}
+            </button>
+
             <OAuth />
           </form>
-          <div className="flex gap-2 text-sm mt-5
-          ">
-            <span>Don&apos;t have an account</span>
-            <Link to="/sign-up" className="text-blue-500">
-                Sign Up
-              </Link>
+
+          <div className="mt-5 text-sm text-gray-600 flex justify-between">
+            <span>Don't have an account?</span>
+            <Link to="/sign-up" className="text-green-600 font-medium hover:underline">
+              Sign Up
+            </Link>
           </div>
-          {
-            errorMessage && (
-              <Alert className="mt-5" color='failure'>
-                {errorMessage}
-              </Alert>
-            )
-          }
+
+          {errorMessage && (
+            <div className="mt-5 p-3 bg-red-100 text-red-700 rounded-md">
+              {errorMessage}
+            </div>
+          )}
         </div>
       </div>
     </div>
-  )
+  );
 }
