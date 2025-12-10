@@ -50,9 +50,9 @@ export default function Header() {
         className="self-center text-xl sm:text-2xl font-semibold text-green-700"
       >
         <span className="px-3 py-1 bg-green-600 text-white rounded-md">
-          Inform
+          Store
         </span>{' '}
-        Me
+        Beacon
       </Link>
 
       {/* Search Bar */}
