@@ -76,8 +76,8 @@ export default function DashPosts() {
           currentUser.isAdmin && (
            <Link to={'/create-post'}>
             <Button type="button" 
-              gradientDuoTone='purpleToPink'
-              className="w-half"
+              
+              className="w-half bg-green-600"
             >
              + Create a Post
             </Button>
@@ -93,8 +93,6 @@ export default function DashPosts() {
               <Table.HeadCell>Post image</Table.HeadCell>
               <Table.HeadCell>Post title</Table.HeadCell>
               <Table.HeadCell>Category</Table.HeadCell>
-              <Table.HeadCell>Course</Table.HeadCell>
-              <Table.HeadCell>Branch</Table.HeadCell>
               <Table.HeadCell>Delete</Table.HeadCell>
               <Table.HeadCell>
                 <span>Edit</span>
@@ -125,8 +123,6 @@ export default function DashPosts() {
                     </Link>
                   </Table.Cell>
                   <Table.Cell>{post.category}</Table.Cell>
-                  <Table.Cell>{post.course}</Table.Cell>
-                  <Table.Cell>{post.branch}</Table.Cell>  
                   <Table.Cell>
                     <span
                       onClick={() => {
