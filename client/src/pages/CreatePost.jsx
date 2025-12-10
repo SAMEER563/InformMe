@@ -1,81 +1,122 @@
 import { Alert, Button, FileInput, Select, TextInput } from 'flowbite-react';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
-import { getDownloadURL, getStorage, ref, uploadBytesResumable } from 'firebase/storage';
-import { app } from '../firebase';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { CircularProgressbar } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 import { useNavigate } from 'react-router-dom';
 
 export default function CreatePost() {
   const [file, setFile] = useState(null);
-  const [imageUploadProgress, setImageUploadProgress] = useState(null);
+  const [previewUrl, setPreviewUrl] = useState(null);
+  const [imageUploadProgress, setImageUploadProgress] = useState(null); // number 0-100 or null
   const [imageUploadError, setImageUploadError] = useState(null);
   const [formData, setFormData] = useState({
     title: '',
     category: '',
     content: '',
-    image: ''
+    image: '' // server URL after submit
   });
   const [publishError, setPublishError] = useState(null);
   const navigate = useNavigate();
 
-  // Upload image to Firebase
-  const handleUploadImage = () => {
+  useEffect(() => {
+    // create preview when file changes
     if (!file) {
-      setImageUploadError('Please select an image');
+      setPreviewUrl(null);
       return;
     }
+    const url = URL.createObjectURL(file);
+    setPreviewUrl(url);
+    return () => URL.revokeObjectURL(url);
+  }, [file]);
 
+  const handleFileChange = (e) => {
     setImageUploadError(null);
-    const storage = getStorage(app);
-    const fileName = new Date().getTime() + '-' + file.name;
-    const storageRef = ref(storage, fileName);
-    const uploadTask = uploadBytesResumable(storageRef, file);
-
-    uploadTask.on(
-      'state_changed',
-      (snapshot) => {
-        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-        setImageUploadProgress(progress.toFixed(0));
-      },
-      (error) => {
-        setImageUploadError('Image upload failed');
-        setImageUploadProgress(null);
-      },
-      () => {
-        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-          setFormData({ ...formData, image: downloadURL });
-          setImageUploadProgress(null);
-          setImageUploadError(null);
-        });
-      }
-    );
+    const f = e.target.files && e.target.files[0];
+    if (!f) {
+      setFile(null);
+      return;
+    }
+    // basic file type check
+    if (!f.type.startsWith('image/')) {
+      setImageUploadError('Please select a valid image file.');
+      setFile(null);
+      return;
+    }
+    setFile(f);
   };
 
-  // Submit form
-  const handleSubmit = async (e) => {
+  // Submit form with file using XMLHttpRequest so we can show upload progress
+  const handleSubmit = (e) => {
     e.preventDefault();
+    setPublishError(null);
+    setImageUploadError(null);
+
+    if (!formData.title?.trim()) {
+      setPublishError('Please enter a title');
+      return;
+    }
     if (!formData.category) {
       setPublishError('Please select a category');
       return;
     }
-    try {
-      const res = await fetch('/api/post/create', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
-      });
-      const data = await res.json();
-      if (!res.ok) {
-        setPublishError(data.message || 'Failed to publish');
-        return;
-      }
-      navigate(`/post/${data.slug}`);
-    } catch (err) {
-      setPublishError('Something went wrong');
+    if (!formData.content?.trim()) {
+      setPublishError('Please add content');
+      return;
     }
+
+    const fd = new FormData();
+    fd.append('title', formData.title);
+    fd.append('category', formData.category);
+    fd.append('content', formData.content);
+    // append file if available (field name "image" matches backend)
+    if (file) fd.append('image', file);
+
+    // Use XMLHttpRequest to track upload progress
+    const xhr = new XMLHttpRequest();
+    xhr.open('POST', '/api/post/create', true);
+    // send cookies (so verifyToken via cookie works)
+    xhr.withCredentials = true;
+
+    xhr.upload.onprogress = (event) => {
+      if (event.lengthComputable) {
+        const percent = Math.round((event.loaded / event.total) * 100);
+        setImageUploadProgress(percent);
+      }
+    };
+
+    xhr.onload = () => {
+      setImageUploadProgress(null);
+      if (xhr.status >= 200 && xhr.status < 300) {
+        try {
+          const res = JSON.parse(xhr.responseText);
+          // if server returned the created post with slug
+          if (res?.slug) {
+            navigate(`/post/${res.slug}`);
+          } else {
+            // fallback: go to posts list
+            navigate('/');
+          }
+        } catch (err) {
+          setPublishError('Published but response parsing failed.');
+        }
+      } else {
+        let msg = 'Failed to publish';
+        try {
+          const errRes = JSON.parse(xhr.responseText);
+          msg = errRes.message || msg;
+        } catch (_) {}
+        setPublishError(msg);
+      }
+    };
+
+    xhr.onerror = () => {
+      setImageUploadProgress(null);
+      setPublishError('Network error while publishing.');
+    };
+
+    xhr.send(fd);
   };
 
   return (
@@ -111,17 +152,24 @@ export default function CreatePost() {
         <div className="flex flex-col sm:flex-row gap-4 items-center border-2 border-dotted border-teal-500 p-3 rounded-md">
           <FileInput
             accept="image/*"
-            onChange={(e) => setFile(e.target.files[0])}
+            onChange={handleFileChange}
           />
-          <Button
-            className='bg-green-400'
-            type="button"
-            color="green"
-            outline
-            onClick={handleUploadImage}
-            disabled={imageUploadProgress !== null}
-          >
-            {imageUploadProgress ? (
+
+          <div className="flex items-center gap-3">
+            <Button
+              type="button"
+              color="gray"
+              onClick={() => {
+                // clear selected file
+                setFile(null);
+                setImageUploadError(null);
+              }}
+            >
+              Clear
+            </Button>
+
+            {/* Show progress or text about the file */}
+            {imageUploadProgress !== null ? (
               <div className="w-16 h-16">
                 <CircularProgressbar
                   value={imageUploadProgress}
@@ -129,13 +177,20 @@ export default function CreatePost() {
                 />
               </div>
             ) : (
-              'Upload Image'
+              <div className="text-sm text-gray-600">
+                {file ? file.name : 'No file selected'}
+              </div>
             )}
-          </Button>
+          </div>
         </div>
 
         {imageUploadError && <Alert color="failure">{imageUploadError}</Alert>}
-        {formData.image && (
+
+        {/* preview (either client file preview or already uploaded image url) */}
+        {previewUrl && (
+          <img src={previewUrl} alt="Preview" className="w-full h-72 object-cover rounded-md" />
+        )}
+        {!previewUrl && formData.image && (
           <img src={formData.image} alt="Uploaded" className="w-full h-72 object-cover rounded-md" />
         )}
 
@@ -149,7 +204,9 @@ export default function CreatePost() {
         />
 
         {/* Submit */}
-        <Button type="submit" color="green">Publish</Button>
+        <Button type="submit" color="green" disabled={imageUploadProgress !== null}>
+          {imageUploadProgress !== null ? 'Publishing...' : 'Publish'}
+        </Button>
 
         {publishError && <Alert color="failure">{publishError}</Alert>}
       </form>

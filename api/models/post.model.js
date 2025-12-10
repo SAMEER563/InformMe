@@ -25,14 +25,14 @@ const postSchema = new mongoose.Schema(
       type: String,
       default: 'uncategorized',
     },
-    course: {
-      type: String,
-      default: 'uncategorized',
-    },
-    branch: {
-      type: String,
-      default: 'uncategorized',
-    },
+    // course: {
+    //   type: String,
+    //   default: 'uncategorized',
+    // },
+    // branch: {
+    //   type: String,
+    //   default: 'uncategorized',
+    // },
     slug: {
       type: String,
       required: true,
