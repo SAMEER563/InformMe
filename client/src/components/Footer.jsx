@@ -10,10 +10,10 @@ export default function FooterCom() {
         {/* Logo & About */}
         <div className="mb-6 md:mb-0 md:w-1/3">
           <Link to="/" className="text-2xl font-bold text-green-700 flex items-center gap-2 mb-4">
-            <span className="px-3 py-1 bg-green-600 text-white rounded-md">Inform</span> Me
+            <span className="px-3 py-1 bg-green-600 text-white rounded-md">Store </span> Beacon
           </Link>
           <p className="text-green-800 text-sm">
-            Discover nearby shops, latest offers, and more. Inform Me helps you find the best local businesses effortlessly.
+            Discover nearby shops, latest offers, and more. Store Beacon helps you find the best local businesses effortlessly.
           </p>
         </div>
 
@@ -34,7 +34,7 @@ export default function FooterCom() {
           <p className="text-green-800 text-sm mb-4">
             123 Main Street, Rameshwaram <br />
             Tamil Nadu, India <br />
-            Email: info@informme.com
+            Email: info@storebeacon.com
           </p>
           <div className="flex gap-4 text-green-700">
             <Link href="#" className="hover:text-green-600 transition"><BsFacebook size={20} /></Link>

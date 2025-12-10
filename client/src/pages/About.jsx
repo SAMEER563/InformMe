@@ -4,13 +4,13 @@ export default function About() {
       <div className="max-w-5xl w-full mx-auto p-6 bg-white shadow-xl rounded-2xl">
         {/* Header */}
         <h1 className="text-4xl font-bold text-center text-green-700 mb-8">
-          About Inform Me
+          About Store Beacon
         </h1>
 
         {/* Intro Text */}
         <div className="text-gray-700 space-y-6 text-lg">
           <p>
-            Welcome to <span className="font-semibold text-green-600">Inform Me</span>! 
+            Welcome to <span className="font-semibold text-green-600">Store Beacon</span>! 
             Your ultimate guide to discovering the best shops and services near you. 
             Explore top-rated restaurants, grocery stores, medical shops, mobile shops, salons, and repair services — all in one place.
           </p>
@@ -22,7 +22,7 @@ export default function About() {
 
           <p>
             Are you a shop owner? Join our platform and reach thousands of potential customers in your area. 
-            <span className="text-green-700 font-semibold"> Inform Me</span> makes it effortless for businesses and users to connect.
+            <span className="text-green-700 font-semibold"> Store Beacon</span> makes it effortless for businesses and users to connect.
           </p>
         </div>
 
@@ -51,7 +51,7 @@ export default function About() {
 
         {/* Features Cards */}
         <h2 className="text-2xl font-semibold text-green-700 mt-12 mb-6 text-center">
-          Why Choose Inform Me
+          Why Choose Store Beacon 
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
           {[

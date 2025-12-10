@@ -48,8 +48,8 @@ export default function ContactUs() {
             {[
               { icon: "📍", title: "Address", desc: "123 Local Street, Your City, Your Country" },
               { icon: "📞", title: "Phone", desc: "+1 234 567 890" },
-              { icon: "✉️", title: "Email", desc: "support@informme.com" },
-              { icon: "🌐", title: "Website", desc: "www.informme.com" },
+              { icon: "✉️", title: "Email", desc: "support@storebeacon.com" },
+              { icon: "🌐", title: "Website", desc: "www.storebeacon.com" },
             ].map((info) => (
               <div
                 key={info.title}
